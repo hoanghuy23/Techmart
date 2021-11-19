@@ -1,0 +1,12 @@
+<div class="panel panel-danger">
+    <div class="panel-heading">PRODUCT EDITION</div>
+    <div ng-include="'/admin/product/_mainForm.html'"></div>
+    <div ng-if="form.category.category.category.id == 1" ng-include="'/admin/product/_formLaptop.html'"></div>
+    <div ng-if="form.category.category.category.id == 40" ng-include="'/admin/product/_formPC.html'"></div>
+    <div ng-if="form.category.category.category.id == 74" ng-include="'/admin/product/_formApple.html'"></div>
+    <div ng-if="form.category.category.category.id == 82" ng-include="'/admin/product/_formBP.html'"></div>
+    <div ng-if="form.category.category.category.id == 106" ng-include="'/admin/product/_formChuot.html'"></div>
+    <div ng-if="form.category.category.category.id == 124" ng-include="'/admin/product/_formTai.html'"></div>
+    <div ng-if="form.category.category.category.id == 143" ng-include="'/admin/product/_formLoa.html'"></div>
+</div>
+

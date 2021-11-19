@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index.html::dynamic(~{::body})}">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<!--/head-->
+
+<body style="background-color: rgb(231, 231, 231)">
+	<section th:object=${item}>
+		<div class="container row mx-auto mt-3" style="background-color: white;">
+			<div class="col-sm-12 padding-right shadow mt-2">
+				<div class="product-details row" th:object=${item}>
+					<!--product-details-->
+					<div class="col-sm-5 mt-4">
+						<div class="mainthumbnail">
+							<th:block th:each="photo:${item.photos}">
+								<img id="imgMain" th:if="${photo.isMain}"
+									th:src="@{|/photos/product-image/${photo.name}|}" alt="" />
+							</th:block>
+						</div>
+						<div id="slide-wrapper">
+							<div id="slideLeft" class="arrow">
+								<i class="fas fa-angle-left"></i>
+							</div>
+							<div id="slider">
+								<th:block th:each="photo:${item.photos}">
+									<img class="thumbnail active" th:if="${photo.isMain}"
+										th:src="@{|/photos/product-image/${photo.name}|}" alt="" />
+								</th:block>
+								<th:block th:each="photo:${item.photos}">
+									<img class="thumbnail" th:if="${!photo.isMain}"
+										th:src="@{|/photos/product-image/${photo.name}|}" alt="" />
+								</th:block>
+							</div>
+							<div id="slideRight" class="arrow">
+								<i class="fas fa-angle-right"></i>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-7">
+						<div class="product-information">
+							<!--/product-information-->
+							<img src="images/product-details/new.jpg" class="newarrival" alt="" />
+							<h2>[[${item.name}]]</h2>
+							<p>Product ID: [[${item.id}]]</p>
+							<span> <label>Quantity:</label> <input type="number" value="1" style="width: 50px;" />
+							</span><br> <span
+								style="color: red; font-size: 23px;">[[${#numbers.formatDecimal(item.price,
+								1, 'DEFAULT', 0, 'DEFAULT')}]] VNĐ</span>
+							<hr>
+							<h5>
+								<strong>Thông tin chung:</strong>
+							</h5>
+							<p>
+								<b><strong>Producer:</strong></b> [[${item.manufacturer}]]
+							</p>
+							<p>
+								<b><strong>Condition:</strong></b> [[${item.condition}]]
+							</p>
+							<p>
+								<b><strong>Insurance:</strong></b> [[${item.insurance}]]
+							</p>
+							<p>
+								<b><strong>Color:</strong></b> [[${item.color}]]
+							</p>
+							<br>
+							<h5>
+								<u style="color: red;">Ưu đãi đặc biệt khi mua kèm laptop:</u>
+							</h5>
+							<li>Mua thêm 1 thanh RAM Sodimm 8GB chỉ với 990.000</li>
+							<li>Mua kèm màn hình giảm sốc lên đên 49%</li>
+							<li>Mua kèm các sản phẩm khác giảm giá lên đến 56%</li>
+							<li>Hỗ trợ trả góp MPOS (Thẻ tín dụng), HDSAISON.</li>
+
+							<div class="row mt-3 mr-2">
+								<button type="button" class="btn mb-1 btn-lg btn-block col-12 rounded"
+									style="background-color: tomato;">
+									<i class="fas fa-shopping-cart"></i> Add to cart
+								</button>
+								<button type="button" class="btn btn-lg col-6 rounded mb-2"
+									style="background-color: rgb(0, 110, 255);">
+									Installment</button>
+								<button type="button" class="btn btn-lg col-6 rounded mb-2"
+									style="background-color: rgb(1, 170, 1);">Reserve</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="product-area most-popular section">
+
+				<div class="container">
+					<div class="ml-5">
+						<h4>
+							<span>Similar products:</span>
+						</h4>
+					</div>
+					<div class="mr-4">
+						<div class="col-12">
+							<div class="owl-carousel popular-slider">
+								<!-- Start Single Product -->
+								<div class="single-product ml-5" th:each="items:${pro}">
+									<div class="product-img">
+										<a th:href="@{|/product/detail/${items.id}|}">
+											<th:block th:each="photo:${items.photos}">
+												<img id="imgMain" th:if="${photo.isMain}"
+													th:src="@{|/photos/product-image/${photo.name}|}" alt="" />
+											</th:block>
+										</a>
+										<div class="button-head">
+											<div class="product-action">
+												<a data-toggle="modal" data-target="#exampleModal" title="Quick View"
+													th:href="@{|/product/detail/${items.id}|}"><i
+														class=" ti-eye"></i><span>Quick
+														Shop</span></a> <a title="Wishlist" href="#"><i
+														class=" ti-heart "></i><span>Add to Wishlist</span></a> <a
+													title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add
+														to Compare</span></a>
+											</div>
+											<div class="product-action-2">
+												<a title="Add to cart" href="#">Add to cart</a>
+											</div>
+										</div>
+									</div>
+									<div class="product-content">
+										<h3>
+											<a href="product-details.html">[[${items.name}]]</a>
+										</h3>
+										<div class="product-price">
+											<span style="color: red;">[[${#numbers.formatDecimal(items.price,
+												1, 'DEFAULT', 0, 'DEFAULT')}]] VNĐ</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item"><a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"
+							role="tab" aria-controls="home" aria-selected="true">Product Description</a></li>
+					<li class="nav-item"><a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile"
+							role="tab" aria-controls="profile" aria-selected="false">Review</a></li>
+					<li class="nav-item"><a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
+							role="tab" aria-controls="contact" aria-selected="false">Contact</a></li>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+						<div class="p-3">
+							<table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0"
+								style="background-color: #ffffff; border-collapse: collapse; border-spacing: 0px; border: 1px solid #eeeeee; box-sizing: border-box; color: #333333; font-family: Roboto, sans-serif; font-size: 13px; line-height: 20px; margin-bottom: 20px; margin-left: auto; margin-right: auto; max-width: 100%; min-width: 500px; width: 100%"
+								class="table table-bordered">
+								<tbody style="box-sizing: border-box;">
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">LAN</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.LAN}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Battery</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.battery}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Bluetooth</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.bluetooth}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Color</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.color}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Communication port</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.commPort}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Condition</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.condition}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											CPU Engine</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.cpuEngine}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Graphics Card</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.graphicsCard}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Hard Drive</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.hardDrive}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Insurance</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.insurance}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Keyboard</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.keyboard}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Manufacturer</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.manufacturer}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Operation System</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.opeSys}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">RAM</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.ram}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Screen</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.screen}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Wifi</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.wifi}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Size</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.size}]]</span>
+										</td>
+									</tr>
+									<tr style="box-sizing: border-box" class="row-info">
+										<td
+											style="background-color: #f7f7f7 !important; border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 200px; font-weight: bold;">
+											<span style="color: #000000">Weight</span>
+										</td>
+										<td
+											style="border-color: #eeeeee; border-style: solid; border-width: 1px; box-sizing: border-box; padding: 8px; vertical-align: top; width: 735px">
+											<span>[[${item.weight}]]</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="col-sm-10">
+								<font face="Times New Roman" size="6">Product
+									Description: </font><br> [[${item.description}]]
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+						<div class="text-center mt-3">
+							<font face="Times New Roman" size="6">Good review</font>
+						</div>
+						<div class="row">
+							<div class="col-4">
+
+								<div class="p-3">
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/WjFj3LxL6RY"
+										title="YouTube video player" frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen></iframe>
+								</div>
+
+							</div>
+							<div class="col-4">
+								<div class="p-3">
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/ZiXXI_uWvpA"
+										title="YouTube video player" frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen></iframe>
+								</div>
+							</div>
+							<div class="col-4">
+								<div class="p-3">
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/XUDh0ZD-ZTA"
+										title="YouTube video player" frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen></iframe>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+						<div class="p-3">
+							<form>
+								<div class="form-group row">
+									<div class="col-sm-1"><img class="rounded-circle" src="https://tse2.mm.bing.net/th?id=OIP.cqGiNayt3c9N7MY1vAE6sQHaHa&pid=Api&P=0&w=300&h=300" alt="" sizes="20%"></div>
+									<div class="col-sm-7">
+										<input type="email" class="form-control mt-3" id="exampleFormControlInput1" placeholder="name@example.com">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="exampleFormControlTextarea1">Example textarea</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+								</div>
+								<div class="col-12">
+									<div class="mr-auto text-right">
+										<button type="button" style="width: 120px; height: 40px; background-color: rgb(1, 170, 1);" class="">Send</button>
+									</div>									
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<script src="/assets/site/js/detail/jquery.js"></script>
+	<script src="/assets/site/js/detail/price-range.js"></script>
+	<script src="/assets/site/js/detail/jquery.scrollUp.min.js"></script>
+	<script src="/assets/site/js/detail/bootstrap.min.js"></script>
+	<script src="/assets/site/js/detail/jquery.prettyPhoto.js"></script>
+	<script src="/assets/site/js/detail/main.js"></script>
+	<script>
+		let thumbnails = document.getElementsByClassName('thumbnail')
+		let activeImg = document.getElementsByClassName('active')
+		for (var i = 0; i < thumbnails.length; i++) {
+			thumbnails[i].addEventListener('click', function () {
+
+				if (activeImg.length > 0) {
+					activeImg[2].classList.remove('active')
+				}
+				this.classList.add('active')
+				document.getElementById('imgMain').src = this.src
+			})
+		}
+		let buttonRight = document.getElementById('slideRight');
+		let buttonLeft = document.getElementById('slideLeft');
+
+		buttonLeft.addEventListener('click', function () {
+			document.getElementById('slider').scrollLeft -= 180
+		})
+
+		buttonRight.addEventListener('click', function () {
+			document.getElementById('slider').scrollLeft += 180
+		})
+	</script>
+</body>
+
+</html>

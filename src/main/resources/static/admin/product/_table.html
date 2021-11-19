@@ -1,0 +1,902 @@
+<div style="margin-bottom: 4px;">
+    <div class="text-danger">*Category</div>
+    <select ng-change="initProductList()" ng-options="c as c.name for c in cates track by c.id"
+        ng-model="form.category.id" class="form-control" style="border:solid;">
+    </select>
+</div>
+<div class="panel panel-danger" id="product-list">
+    <div class="panel-heading">PRODUCT LIST</div>
+    <form>
+        <div class="col-3">
+            <input type="text" class="form-control" placeholder="Search" ng-model="searchName">
+        </div>
+    </form>
+    <table class="table table-bordered table-hover">
+        <thead class="bg-success" style="font-variant: small-caps">
+            <tr>
+                <th ng-click="sortBy('id')" style="width:50px">Id
+                    <span ng-show="reverse==true && propertyName === 'id'" class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'id'" class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th ng-click="sortBy('name')">Name
+                    <span ng-show="reverse==true && propertyName === 'name'" class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'name'" class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th ng-click="sortBy('price')">Price
+                    <span ng-show="reverse==true && propertyName === 'price'" class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'price'" class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th ng-click="sortBy('createDate')" style="width:150px">Create Date
+                    <span ng-show="reverse==true && propertyName === 'createDate'" class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'createDate'" class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th ng-click="sortBy('category.name')" style="width:200px">Category
+                    <span ng-show="reverse==true && propertyName === 'category.name'"
+                        class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'category.name'"
+                        class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th ng-click="sortBy('origin')" style="width:80px">Origin
+                    <span ng-show="reverse==true && propertyName === 'origin'" class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'origin'" class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th ng-click="sortBy('status')" style="width:150px">Available?
+                    <span ng-show="reverse==true && propertyName === 'status'" class="fa fa-caret-down ml-1"></span>
+                    <span ng-show="reverse==false && propertyName === 'status'" class="fa fa-caret-up ml-1"></span>
+                </th>
+                <th style="width:140px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in pager.items | orderBy : propertyName : reverse | filter:searchName">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price | number:2}}</td>
+                <td>{{item.createDate | date: 'dd-MM-yyyy'}}</td>
+                <td>{{item.category.name}}</td>
+                <td>{{item.origin}}</td>
+                <td>{{item.status? 'Yes' : 'No'}}</td>
+                <td>
+                    <div class="btn-group btn-group-xs">
+                        <button ng-click="view(item)" class="btn btn-primary" data-toggle="modal"
+                            data-target="#defaultModal"><i class="material-icons">remove_red_eye</i></button>
+                        <button ng-click="viewImage(item)" class="btn btn-info"><i
+                                class="material-icons">collections</i></button>
+                        <button ng-click="edit(item)" class="btn btn-warning"><i
+                                class="material-icons">mode_edit</i></button>
+                        <button ng-click="delete(item)" class="btn btn-danger"><i
+                                class="material-icons">delete_forever</i></button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="panel-footer text-center">
+        <button ng-click="pager.first()" class="btn btn-danger">
+            <i class="material-icons">skip_previous</i>
+        </button>
+        <button ng-click="pager.prev()" class="btn btn-warning">
+            <i class="material-icons">fast_rewind</i>
+        </button>
+        <button class="btn btn-success">{{pager.page + 1}} of {{pager.count}}</button>
+        <button ng-click="pager.next()" class="btn btn-primary">
+            <i class="material-icons">fast_forward</i>
+        </button>
+        <button ng-click="pager.last()" class="btn btn-danger">
+            <i class="material-icons">skip_next</i>
+        </button>
+    </div>
+
+    <div class="modal fade" ng-if="form.category.category.category.id == 1" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo">
+                            <div class="photo-container">
+                                <div class="photo-main">
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}"
+                                            style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0"
+                                            style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%"
+                                            class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">LAN</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.lan}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Battery</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.battery}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Bluetooth</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.bluetooth}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Color</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.color}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Communication port</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.commPort}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Condition</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.condition}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        CPU Engine</td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.cpuEngine}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Graphics Card</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.graphicsCard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Hard Drive</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.hardDrive}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Insurance</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.insurance}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Keyboard</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.keyboard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Manufacturer</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.manufacturer}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Operation System</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.opeSys}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">RAM</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.ram}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Screen</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.screen}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Wifi</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.wifi}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Size</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.size}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Weight</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.weight}}</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------ -->
+    <div class="modal fade" ng-if="form.category.category.category.id == 40" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo">
+                            <div class="photo-container">
+                                <div class="photo-main">
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}"
+                                            style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0"
+                                            style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%"
+                                            class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Mainboard</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.mainboard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">CPU Engine</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.cpuEngine}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">RAM</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.ram}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">VGA</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.graphicsCard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">HDD</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.hardDrive}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">SSD</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.ssd}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">PSU</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.psu}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Case</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.cases}}</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------ -->
+    <div class="modal fade" ng-if="form.category.category.category.id == 74" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo">
+                            <div class="photo-container">
+                                <div class="photo-main">
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}"
+                                            style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0"
+                                            style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%"
+                                            class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">LAN</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.lan}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Battery</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.battery}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Bluetooth</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.bluetooth}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Color</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.color}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Communication port</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.commPort}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Condition</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.condition}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        CPU Engine</td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.cpuEngine}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Graphics Card</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.graphicsCard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Hard Drive</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.hardDrive}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Insurance</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.insurance}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Keyboard</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.keyboard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Manufacturer</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.manufacturer}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Operation System</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.opeSys}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">RAM</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.ram}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Screen</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.screen}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Wifi</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.wifi}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Size</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.size}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Weight</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.weight}}</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------ -->
+    <div class="modal fade" ng-if="form.category.category.category.id == 82" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo col">
+                            <div class="photo-container">
+                                <div class="product__photo">
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}"
+                                            style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0"
+                                            style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%"
+                                            class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Pin Connection</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.pinConnection}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Keyboard</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.keyboard}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">LEB</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.leb}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Pixel Size</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.pixelSize}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Size</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.size}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Weight</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.weight}}</span></td>
+                                                </tr>
+                                                <tr style="box-sizing:border-box" class="row-info">
+                                                    <td
+                                                        style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px">
+                                                        <span style="color:#000000">Special Features</span></td>
+                                                    <td
+                                                        style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px">
+                                                        <span>{{form.spe}}</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------ -->
+    <div class="modal fade" ng-if="form.category.category.category.id == 106" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo">
+                            <div class="photo-container">
+                                <div class="photo-main" >
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}" style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0" style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%" class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Mainboard</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.mainboard}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">CPU Engine</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.cpuEngine}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">RAM</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.ram}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">VGA</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.graphicsCard}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">HDD</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.hardDrive}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">SSD</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.ssd}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">PSU</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.psu}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Case</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.cases}}</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------ -->
+    <div class="modal fade" ng-if="form.category.category.category.id == 124" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo">
+                            <div class="photo-container">
+                                <div class="photo-main" >
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}" style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0" style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%" class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">KÃªt ná»‘i</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.kn}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Ä�áº·c tÃ­nh</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.dt}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Sá»‘ driver má»—i bÃªn</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.sdmb}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Sound Proofing</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.soundProofing}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Used Time</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.usedTime}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Charging time</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.char}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Cá»•ng sáº¡c</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.cs}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Weight</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.weight}}</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <!-- ------ -->
+    <div class="modal fade" ng-if="form.category.category.category.id == 143" id="defaultModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog" role="document" style="width:1000px">
+            <div class="modal-content">
+                <div class="col-sm-12">
+                    <section class="product">
+                        <div class="product__photo">
+                            <div class="photo-container">
+                                <div class="photo-main" >
+                                    <div ng-repeat="photo in form.photos">
+                                        <img ng-if="photo.main" src="/photos/product-image/{{photo.name}}" style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product__info">
+                            <div class="title">
+                                <h4 class="text-danger">{{form.name}}</h4>
+                            </div>
+                            <div class="description">
+                                <div class="row form-group">
+                                    <div class="col">
+                                        <table id="tblGeneralAttribute" border="1" cellpadding="3" cellspacing="0" style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; border:1px solid #eeeeee; box-sizing:border-box; color:#333333; font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-bottom:20px; margin-left:auto; margin-right:auto; max-width:100%; min-width:500px; width:100%" class="table table-bordered">
+                                            <tbody style="box-sizing: border-box;">
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Manufacturer</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.manufacturer}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Model</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.model}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Color</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.color}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Audio</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.audio}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">CÃ´ng suáº¥t</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.cos}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Scan Frequency</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.scanFrequency}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Bluetooth</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.bluetooth}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Battery</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.Battery}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Thá»�i gian sáº¡c pin</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.tgsp}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Size</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.size}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Weight</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.weight}}</span></td>
+                                            </tr>
+                                            <tr style="box-sizing:border-box" class="row-info">
+                                                <td style="background-color:#f7f7f7 !important; border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:200px"><span style="color:#000000">Accessory</span></td>
+                                                <td style="border-color:#eeeeee; border-style:solid; border-width:1px; box-sizing:border-box; padding:8px; vertical-align:top; width:735px"><span>{{form.accessory}}</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>      
+</div>

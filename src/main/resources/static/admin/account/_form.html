@@ -1,0 +1,113 @@
+<div class="container-fluid content">
+	<div class="row clearfix container-fluid">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="card">
+				<div class="header">
+					<h2>EDIT ACCOUNT</h2>
+					<ul class="header-dropdown m-r--5">
+						<li class="dropdown"><a href="javascript:void(0);"
+							class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expanded="false"> <i
+								class="material-icons">more_vert</i>
+						</a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="javascript:void(0);">Action</a></li>
+								<li><a href="javascript:void(0);">Another action</a></li>
+								<li><a href="javascript:void(0);">Something else here</a></li>
+							</ul></li>
+					</ul>
+				</div>
+				<div class="body">
+					<form id="form_validation" method="POST">
+                            <div class="row clearfix">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                    <label>Fullname: </label>
+                                        <div class="form-line" id="bs_datepicker_container">
+                                            <input type="text" ng-model="userDetail.fullName" class="form-control" placeholder="Fullname">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                	<div class="form-group">
+									<label for="">Birthday</label>
+                                    <div class="form-line" id="bs_datepicker_container">
+                                         <input type="text" ng-model="userDetail.birthday" class="form-control" placeholder="dd/MM/yyyy"/>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+						<div class="row clearfix">
+							<div class="col-md-6">
+								<div class="form-group">
+								<label>Email: </label>
+									<div class="form-line">
+										<input type="email" ng-model="userDetail.email" ng-disabled = "disabledField" class="form-control" placeholder="Email">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								<label>Phone: </label>
+									<div class="form-line">
+										<input type="text" ng-model="userDetail.phone" class="form-control" placeholder="Phone">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Gender</label><br>
+									<input type="radio" ng-model="userDetail.gender" ng-value="true" name="gender" id="male" class="with-gap">
+										<label for="male">Male</label> 
+									<input type="radio" ng-model="userDetail.gender" ng-value="false" name="gender" id="female" class="with-gap"> 
+										<label for="female" class="m-l-20">Female</label>
+								</div>
+							</div>							
+						</div>
+                        <div class="row clearfix">
+							<div class="col-md-6">
+								<div class="form-group">
+								<label>Username: </label>
+									<div class="form-line">
+										<input type="text" ng-model="account.username" ng-disabled = "disabledField" class="form-control" placeholder="Username">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								<label>Password: </label>
+									<div class="form-line">
+										<input type="password" ng-model="account.password" ng-disabled = "disabledField" class="form-control" placeholder="Password">
+									</div>
+								</div>
+							</div>
+						</div>
+                        <!-- <div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="">
+										<label>Status</label>
+										<div class="switch">
+											<label>OFF<input type="checkbox" ng-model="account.status" value="true" checked><span
+												class="lever"></span>ON
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<button class="btn btn-primary waves-effect" type="submit" ng-click="create()">CREATE</button>
+                        <button class="btn btn-success waves-effect" ng-click="update()">UPDATE</button>
+                        <button class="btn btn-danger waves-effect" ng-click="delete(userDetail)">DELETE</button>
+                        <button class="btn btn-light waves-effect" ng-click="reset()">RESET</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- #END# Validation Stats -->
+</div>

@@ -1,0 +1,54 @@
+<div class="container-fluid">
+	<div class="row clearfix">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="card">
+				<div class="header">
+					<h2>LIST ACCOUNT</h2>
+					<ul class="header-dropdown m-r--5">
+						<div>
+							<div class="container-1">
+								<span class="icon"><i class="fas fa-search"></i></span>
+								<input type="text" ng-model="user" id="search" placeholder="Search..."/>
+							</div>
+						</div>						
+					</ul>
+				</div>
+				<div class="body table-responsive">
+					<table class="table table-hover tree-grid">
+						<thead>
+							<tr>
+								<th style="width: 180px;">Full name</th>
+								<th>BirthDay</th>
+								<th style="width: 180px;">Email</th>
+								<th>Phone</th>
+								<th>Gender</th>
+								<th>Username</th>
+								<th>Status</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="acc in items | filter: user">
+								<td style="width: 180px;">{{acc.info.fullName}}</td>
+								<td>{{acc.info.birthday | date : 'dd/MM/yyyy'}}</td>
+								<td style="width: 180px;">{{acc.info.email}}</td>
+								<td>{{acc.info.phone}}</td>
+								<td>{{acc.info.gender?'Nam':'Nữ'}}</td>
+								<td>{{acc.username}}</td>
+								<td><div class="form-group">
+										<div class="switch">
+											<label><input type="checkbox" ng-model="acc.status"
+												ng-click="UpStatus(acc)" value="true" checked><span
+												class="lever"></span> </label>
+										</div>
+									</div></td>
+								<td><a ng-click="edit(acc, acc.info)"><i
+										class="fas fa-user-edit"></i></a> <a ng-click="delete(acc)"></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

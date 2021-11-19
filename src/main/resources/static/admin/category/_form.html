@@ -1,0 +1,65 @@
+<!--<div style="margin-bottom: 4px;">-->
+<!--    <div class="text-danger">*Level</div>-->
+<!--    <select ng-model="level" class="form-control" style="border:solid;"-->
+<!--            onchange="window.location.href = '#!category/' + this.options[this.selectedIndex].value">-->
+<!--        <option value="P">Parent</option>-->
+<!--        <option value="C">Child</option>-->
+<!--        <option value="S">Sub Child</option>-->
+<!--    </select>-->
+<!--</div>-->
+<div class="panel panel-danger">
+    <div class="panel-heading">CATEGORY EDITION</div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            <div class="col-sm-12">
+                <div class="demo-radio-button">
+                    <input name="group1" ng-click="setTreeType('P')"  type="radio" id="radio_1" checked value="P"/>
+                    <label for="radio_1">Parent</label>
+                    <input name="group1" ng-click="setTreeType('C')"  type="radio" id="radio_2" value="C"/>
+                    <label for="radio_2">Child</label>
+                    <input name="group1" ng-click="setTreeType('S')"  type="radio" id="radio_3" value="S"/>
+                    <label for="radio_3">Sub Child</label>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <div>*Name</div>
+                        <input ng-model="form.name" type="text" class="form-control" style="border:solid; padding-left: 4px;">
+                    </div>
+                    <div class="col-sm-4">
+                        <div>*Parent</div>
+                        <select ng-if="treetype=='P'" id="parentC" class="form-control" ng-change="initChild()" ng-model="form.category.id" disabled style="border:solid;">
+                            <option ng-repeat="c in cates" ng-value="c.id">{{c.name}}</option>
+                        </select>
+                        <select ng-if="treetype=='C'" id="parentC" class="form-control" ng-change="initChild()" ng-model="form.category.id" style="border:solid;">
+                            <option ng-repeat="c in cates" ng-value="c.id">{{c.name}}</option>
+                        </select>
+                        <select ng-if="treetype=='S'" id="parentC" class="form-control" ng-change="initChild()" ng-model="form.category.category.id" style="border:solid;">
+                            <option ng-repeat="c in cates" ng-value="c.id">{{c.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div>*Child</div>
+                        <select  class="form-control" id="child" ng-model="form.category.id" disabled style="border:solid;">
+                            <option ng-repeat="s in childCates" ng-value="s.id">{{s.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <button ng-click="create()" id="create" class="btn btn-success">
+                <b class="icon icon-plus"></b> Create
+            </button>
+            <button ng-click="update()" id="update" class="btn btn-warning">
+                <b class="icon icon-refresh"></b> Update
+            </button>
+            <button ng-click="delete(form)" id="delete" class="btn btn-danger">
+                <b class="icon icon-trash"></b> Delete
+            </button>
+            <button ng-click="reset()" class="btn btn-primary">
+                <b class="icon icon-reload"></b> Reset
+            </button>
+        </div>
+    </div>
+
+</div>

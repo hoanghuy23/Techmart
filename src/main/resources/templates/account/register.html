@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Register</title>
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!-- Font-->
+	<link rel="stylesheet" type="text/css" href="/assets/site/css/opensans-font.css">
+	<link rel="stylesheet" type="text/css" href="/assets/site/css/line-awesome.min.css">
+	<!-- Jquery -->
+	<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+	<!-- Main Style Css -->
+    <link rel="stylesheet" href="/assets/site/css/regis.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+	<link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+	<script src='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.min.js'></script>
+</head>
+<body class="form-v7" ng-app="site-app" ng-controller="register-ctrl">
+			<div class="loading" id="loading">
+				<img src="/assets/site/images/loading.gif" alt="">
+			</div>
+	<div class="page-content">
+				
+		<div class="form-v7-content">			
+			<div class="form-left">
+				<img src="/assets/site/images/Asus-GL553VD.jpg" alt="form" height="auto">
+				<p class="text-1">Sign Up</p>
+				<p class="text-2">Privaci policy & Term of service</p>
+			</div>
+			<form class="form-detail" action="#" method="post" id="myform">
+				<div class="form-row">
+					<label for="your_email">E-MAIL</label>
+					<input type="text" ng-model="userDetail.email" name="your_email" id="your_email" class="input-text" required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}">
+				</div>
+				<div class="form-row">
+					<label for="username">USERNAME</label>
+					<input type="text" ng-model="account.username" name="username" id="username" class="input-text">
+				</div>
+				<div class="form-row">
+					<label for="fullname">FULLNAME</label>
+					<input type="text" ng-model="userDetail.fullName" name="fullname" id="fullname" class="input-text">
+				</div>
+				<div class="form-row">
+					<label for="password">PASSWORD</label>
+					<input type="password" ng-model="account.password" name="password" id="password" class="input-text" required>
+				</div>
+				<div class="form-row">
+					<label for="comfirm_password">CONFIRM PASSWORD</label>
+					<input type="password" name="comfirm_password" id="comfirm_password" class="input-text" required>
+				</div>
+				<div class="form-row-last mt-3">
+					<input type="submit" ng-click="register()" name="register" class="register" value="Register">
+					<p>Or<a th:href="@{/login/form}">Sign in</a></p>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+	<script src="/site/account/register.js"></script>
+	<script>
+		// just for the demos, avoids form submit
+		jQuery.validator.setDefaults({
+		  	debug: true,
+		  	success:  function(label){
+        		label.attr('id', 'valid');
+   		 	},
+		});
+		$( "#myform" ).validate({
+		  	rules: {
+				username: "required",
+				fullname: "required",
+			    your_email: {
+			      	required: true,
+			      	email: true
+			    },
+			    password: "required",
+		    	comfirm_password: {
+		      		equalTo: "#password"
+		    	}
+		  	},
+		  	messages: {
+		  		username: {
+		  			required: "Vui lòng nhập username"
+		  		},
+				fullname: {
+					required: "Vui lòng nhập fullname"
+				},
+		  		your_email: {
+		  			required: "Vui lòng nhập email"
+		  		},
+		  		password: {
+	  				required: "Vui lòng nhập password"
+		  		},
+		  		comfirm_password: {
+		  			required: "Vui lòng nhập password",
+		      		equalTo: "Sai mật khẩu"
+		    	}
+		  	}
+		});
+	</script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

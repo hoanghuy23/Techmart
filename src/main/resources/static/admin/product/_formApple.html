@@ -1,0 +1,110 @@
+<div class="panel-body slide-next">
+    <div class="row clearfix">
+        <div class="col-sm-12">
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>LAN</div>
+                    <input ng-model="form.lan" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Battery</div>
+                    <input ng-model="form.battery" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Bluetooth</div>
+                    <input ng-model="form.bluetooth" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Color</div>
+                    <input ng-model="form.color" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Communication port</div>
+                    <input ng-model="form.commPort" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Condition</div>
+                    <input ng-model="form.condition" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>CPU Engine</div>
+                    <input ng-model="form.cpuEngine" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Graphics Card</div>
+                    <input ng-model="form.graphicsCard" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Hard Drive</div>
+                    <input ng-model="form.hardDrive" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Insurance</div>
+                    <input ng-model="form.insurance" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Keyboard</div>
+                    <input ng-model="form.keyboard" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Manufacturer</div>
+                    <input ng-model="form.manufacturer" type="text" class="form-control" style="border:solid;">
+                </div>
+
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Operation System</div>
+                    <input ng-model="form.opeSys" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>RAM</div>
+                    <input ng-model="form.ram" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Screen</div>
+                    <input ng-model="form.screen" type="text" class="form-control" style="border:solid;">
+                </div>
+
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Wifi</div>
+                    <input ng-model="form.wifi" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Size</div>
+                    <input ng-model="form.size" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Weight</div>
+                    <input ng-model="form.weight" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="panel-footer text-right">
+        <button onclick="myFunction2()" id="previous" class="btn btn-info">
+            Previous <b class="fa fa-paypal"></b>
+        </button>
+        <button ng-click="create()" id="create" class="btn btn-success">
+            <b class="icon icon-plus"></b> Create
+        </button>
+        <button ng-click="update()" id="update" class="btn btn-warning">
+            <b class="icon icon-refresh"></b> Update
+        </button>
+        <button ng-click="delete(form)" id="delete" class="btn btn-danger">
+            <b class="icon icon-trash"></b> Delete
+        </button>
+        <button ng-click="reset()" class="btn btn-primary">
+            <b class="icon icon-reload"></b> Reset
+        </button>
+    </div>
+</div>

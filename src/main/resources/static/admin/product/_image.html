@@ -1,0 +1,39 @@
+<div class="block-header">
+    <h2>PHOTOS MANAGEMENT</h2>
+</div>
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h4>
+                    <a class="btn btn-info" href="index.html#!product"><i class="material-icons">subdirectory_arrow_left</i></a>
+                </h4>
+            </div>
+            <div class="body">
+                 <label for="upload" class="drag-icon-cph btn btn-primary" style="display: flex">
+                     <i class="material-icons">touch_app</i>
+                     <input id="upload" type="file" accept="image/*" multiple
+                                 onchange="angular.element(this).scope().upload(this.files)"/>
+                 </label>
+
+                <div id="aniimated-thumbnials" class="list-unstyled row clearfix photos">
+                    <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12" style="position: relative" ng-repeat="p in photos|orderBy:p.main" >
+                        <a data-sub-html="{{p.name}}">
+                            <img ng-class="{{p.main == true }} ? 'red-background' : {{p.status == false}} ? 'item-disabled' : 'default-bg'" id="photo--{{p.name}}" class="img-responsive thumbnail" ng-src="{{url(p.name)}}">
+                            <button ng-show="{{p.status == true}}" id="mainButton--{{p.name}}" ng-click="setMain(p)" class="btn btn-primary button-hide" style="position: absolute;left: 95px;top: 75px;padding: 3px 6px">
+                                <i class="material-icons">person_pin</i>
+                            </button>
+                            <button ng-show="{{p.status == true}}" id="deleteButton--{{p.name}}" ng-click="delete(p.id)" class="btn btn-danger button-hide" style="position: absolute;left: 143px;top: 75px;padding: 3px 6px">
+                                <i class="material-icons">delete</i>
+                            </button>
+                            <button ng-class="{{p.status == false}} ? 'button-hide' : 'button-hidden'" id="activeButton--{{p.name}}" ng-click="active(p.id)" class="btn btn-success" style="position: absolute;left: 143px;top: 75px;padding: 3px 6px">
+                                <i class="material-icons">refresh</i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

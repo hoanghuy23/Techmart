@@ -1,0 +1,61 @@
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2 style="font-weight: bold;">AUTHORITY</h2>
+                    <ul class="header-dropdown m-r--5">
+                        <div class="form-group">
+                            <label for="exampleSelectBorder"><code>Role</code></label> <select
+                                class="custom-select form-control-border" ng-model="admin"
+                                onchange="window.location.href = '#!authorize/' + this.options[this.selectedIndex].value"
+                                id="exampleSelectBorder" style="width: 200px;">
+                                <option value="true">Admin</option>
+                                <option value="false">All</option>
+                            </select>
+                        </div>
+                    </ul>
+                </div>
+                <div class="body table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th ng-repeat="role in roles" class="text-center">{{role.name}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="acc in pager.admins">
+                                <td>{{acc.info.fullName}}</td>
+                                <th ng-repeat="role in roles">
+                                    <div class="switch text-center">
+                                        <label><input type="checkbox" ng-checked="authority_of(acc, role)"
+                                                ng-click="authority_changed(acc, role)"><span
+                                                class="lever switch-col-deep-orange"></span></label>
+                                    </div>
+                                    <!-- <input type="checkbox" ng-checked="authority_of(acc, role)" ng-click="authority_changed(acc, role)"> -->
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="card-footer clearfix text-center">
+                        <button ng-click="pager.first()" class="btn btn-danger">
+                            <i class="fas fa-hand-point-up"></i>
+                        </button>
+                        <button ng-click="pager.prev()" class="btn btn-primary">
+                            <i class="fas fa-hand-point-left"></i>
+                        </button>
+                        <button class="btn btn-success">{{pager.page + 1}} of
+                            {{pager.count}}</button>
+                        <button ng-click="pager.next()" class="btn btn-primary">
+                            <i class="fas fa-hand-point-right"></i>
+                        </button>
+                        <button ng-click="pager.last()" class="btn btn-danger">
+                            <i class="fas fa-hand-point-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

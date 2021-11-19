@@ -1,0 +1,37 @@
+<div class="panel panel-danger">
+    <div class="panel-heading">INVENTORY</div>
+    <table class="table table-bordered table-hover">
+        <thead class="bg-success" style="font-variant: small-caps">
+        <tr>
+            <th>Category</th>
+            <th>Sales</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="s in inventory">
+                <td>{{s.loai.name}}</td>
+                <td>
+                    {{s.sale | number: 2}}
+                </td>
+                <td>{{s.amount}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="panel-footer text-center">
+        <button ng-click="pager.first()" class="btn btn-danger">
+            <i class="material-icons">skip_previous</i>
+        </button>
+        <button ng-click="pager.prev()" class="btn btn-warning">
+            <i class="material-icons">fast_rewind</i>
+        </button>
+        <button class="btn btn-success">{{pager.page + 1}} of {{pager.count}}</button>
+        <button ng-click="pager.next()" class="btn btn-primary">
+            <i class="material-icons">fast_forward</i>
+        </button>
+        <button ng-click="pager.last()" class="btn btn-danger">
+            <i class="material-icons">skip_next</i>
+        </button>
+    </div>
+</div>

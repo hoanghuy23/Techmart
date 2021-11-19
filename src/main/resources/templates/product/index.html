@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index.html::dynamic(~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-app="site-app" ng-controller="product-ctrl">
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="bread-inner">
+                    <ul class="bread-list">
+                        <li><a href="index1.html">Home<i class="ti-arrow-right"></i></a></li>
+                        <li class="active"><a href="blog-single.html">Shop Grid</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumbs -->
+<!-- Product Style -->
+<section class="product-area shop-sidebar shop section" style="padding: 20px 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="shop-top">
+                            <div class="shop-shorter">
+                                <div class="single-shorter">
+                                    <label>Sort By :</label>
+                                    <select>
+                                        <option value="name">Name</option>
+                                        <option value="price">Price</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="single-shorter float-right">
+                                <label>Price :</label>
+                                <select id="select_id">
+                                    <option value="">--Please select--</option>
+                                    <option value="under15">Under 15 million</option>
+                                    <option value="15-20">15 - 20 million</option>
+                                    <option value="20-25">20 - 25 million</option>
+                                    <option value="25-30">25 - 30 million</option>
+                                    <option value="over30">Over 30 million</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div ng-repeat="item in pager.items | orderBy:sortvalue" class="col-lg-4 col-md-6 col-12">
+                        <div class="single-product">
+                            <div class="product-img">
+                                <a href="/product/detail/{{item.id}}">
+                                    <div ng-repeat="photo in item.photos">
+                                        <img ng-if="photo.main" class="default-img" src="/photos/product-image/{{photo.name}}" alt="#">
+                                        <img ng-if="photo.main" class="hover-img" src="/photos/product-image/{{photo.name}}" alt="#">
+                                    </div>
+                                </a>
+                                <div class="button-head">
+                                    <div class="product-action">
+                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href=""><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                        <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                        <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+                                    </div>
+                                    <div class="product-action-2">
+                                        <a title="Add to cart" href="#">Add to cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <h3><a href="product-details.html">{{item.name}}</a></h3>
+                                <div class="product-price">
+                                    <span style="color: red">{{item.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="Page navigation example" id="navigation">
+                <ul class="pagination">
+                    <li class="page-item" ng-click="pager.first()">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li ng-repeat="pageNumber in pageNumbers" class="{{pageNumber == pageindex ? 'active page-item':'page-item'}}" ng-click="pager.change(pageNumber)"><a class="page-link" href="#">{{pageNumber}}</a></li>
+                    <li class="page-item" ng-click="pager.last()">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+<script th:inline="javascript">
+    app = angular.module("site-app", []);
+    app.controller("product-ctrl", function ($scope, $http){
+        $scope.categoryid = [[${category}]];
+        $scope.productname = [[${name}]];
+        $scope.items = [];
+        $scope.pageNumbers = [];
+        $scope.pageindex = 1;
+        $scope.initialize = function (){
+            if($scope.categoryid !== null){
+                $http.get(`/rest/products/category/${$scope.categoryid}`).then(resp => {
+                    $scope.items = resp.data;
+                })
+                $http.get(`/rest/products/categorypages/${$scope.categoryid}`).then(resp => {
+                    $scope.pageNumbers = resp.data;
+                })
+            }else{
+                $http.get(`/rest/products/name/${$scope.productname}`).then(resp => {
+                    $scope.items = resp.data;
+                })
+                $http.get(`/rest/products/namepages/${$scope.productname}`).then(resp => {
+                    $scope.pageNumbers = resp.data;
+                })
+            }
+        }
+        $scope.initialize();
+
+        $('#select_id').change(function(){
+            switch ($(this).val()) {
+                case "under15":
+                    $scope.items = [];
+                    $scope.pageNumbers = [];
+                    $scope.pageindex = 1;
+                    $scope.pager.page = 0;
+                    if($scope.categoryid !== null){
+                        $http.get(`/rest/products/categoryandprice/${$scope.categoryid}/0/15000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/categoryandpricepages/${$scope.categoryid}/0/15000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }else{
+                        $http.get(`/rest/products/nameandprice/${$scope.productname}/0/15000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/nameandpricepages/${$scope.productname}/0/15000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }
+                    break;
+                case "15-20":
+                    $scope.items = [];
+                    $scope.pageNumbers = [];
+                    $scope.pageindex = 1;
+                    $scope.pager.page = 0;
+                    if($scope.categoryid !== null){
+                        $http.get(`/rest/products/categoryandprice/${$scope.categoryid}/15000000/20000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/categoryandpricepages/${$scope.categoryid}/15000000/20000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }else{
+                        $http.get(`/rest/products/nameandprice/${$scope.productname}/15000000/20000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/nameandpricepages/${$scope.productname}/15000000/20000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }
+                    break;
+                case "20-25":
+                    $scope.items = [];
+                    $scope.pageNumbers = [];
+                    $scope.pageindex = 1;
+                    $scope.pager.page = 0;
+                    if($scope.categoryid !== null){
+                        $http.get(`/rest/products/categoryandprice/${$scope.categoryid}/20000000/25000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/categoryandpricepages/${$scope.categoryid}/20000000/25000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }else{
+                        $http.get(`/rest/products/nameandprice/${$scope.productname}/20000000/25000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/nameandpricepages/${$scope.productname}/20000000/25000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }
+                    break;
+                case "25-30":
+                    $scope.items = [];
+                    $scope.pageNumbers = [];
+                    $scope.pageindex = 1;
+                    $scope.pager.page = 0;
+                    if($scope.categoryid !== null){
+                        $http.get(`/rest/products/categoryandprice/${$scope.categoryid}/25000000/30000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/categoryandpricepages/${$scope.categoryid}/25000000/30000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }else{
+                        $http.get(`/rest/products/nameandprice/${$scope.productname}/25000000/30000000`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/nameandpricepages/${$scope.productname}/25000000/30000000`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }
+                    break;
+                case "over30":
+                    $scope.items = [];
+                    $scope.pageNumbers = [];
+                    $scope.pageindex = 1;
+                    $scope.pager.page = 0;
+                    if($scope.categoryid !== null){
+                        $http.get(`/rest/products/categoryandprice/${$scope.categoryid}/30000000/9999999999999`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/categoryandpricepages/${$scope.categoryid}/30000000/9999999999999`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }else{
+                        $http.get(`/rest/products/nameandprice/${$scope.productname}/30000000/9999999999999`).then(resp => {
+                            $scope.items = resp.data;
+                        })
+                        $http.get(`/rest/products/nameandpricepages/${$scope.productname}/30000000/9999999999999`).then(resp => {
+                            $scope.pageNumbers = resp.data;
+                        })
+                    }
+                    break;
+            }
+        });
+      
+        $scope.pager = {
+            page: 0,
+            size: 9,
+            get items() {
+                var start = this.page * this.size;
+                return $scope.items.slice(start, start + this.size)
+            },
+            get count() {
+                return Math.ceil(1.0 * $scope.items.length / this.size);
+            },
+            first() {
+                this.page = 0;
+                $scope.pageindex = 1;
+            },
+            last() {
+                this.page = $scope.pageNumbers.length - 1;
+                $scope.pageindex = $scope.pageNumbers.length;
+            },
+            change(index) {
+                this.page = index - 1;
+                $scope.pageindex = index;
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

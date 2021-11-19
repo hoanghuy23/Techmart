@@ -1,0 +1,78 @@
+
+<div class="panel-body slide-next">
+    <div class="row clearfix">
+        <div class="col-sm-12">
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Manufacturer</div>
+                    <input ng-model="form.manufacturer" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Model</div>
+                    <input ng-model="form.model" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Color</div>
+                    <input ng-model="form.color" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Audio</div>
+                    <input ng-model="form.audio" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Scan Frequency</div>
+                    <input ng-model="form.scanFrequency" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Bluetooth</div>
+                    <input ng-model="form.bluetooth" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Battery</div>
+                    <input ng-model="form.battery" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Battery charging time</div>
+                    <input ng-model="form.usedTime" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <div>Size</div>
+                    <input ng-model="form.size" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Weight</div>
+                    <input ng-model="form.weight" type="text" class="form-control" style="border:solid;">
+                </div>
+                <div class="col-sm-4">
+                    <div>Accessory</div>
+                    <input ng-model="form.accessory" type="text" class="form-control" style="border:solid;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-right">
+        <button onclick="myFunction2()" id="previous" class="btn btn-info">
+            Previous <b class="fa fa-paypal"></b>
+        </button>
+        <button ng-click="create()" id="create" class="btn btn-success">
+            <b class="icon icon-plus"></b> Create
+        </button>
+        <button ng-click="update()" id="update" class="btn btn-warning">
+            <b class="icon icon-refresh"></b> Update
+        </button>
+        <button ng-click="delete(form)" id="delete" class="btn btn-danger">
+            <b class="icon icon-trash"></b> Delete
+        </button>
+        <button ng-click="reset()" class="btn btn-primary">
+            <b class="icon icon-reload"></b> Reset
+        </button>
+    </div>
+</div>
+
+

@@ -1,0 +1,92 @@
+<div class="panel-body next-slide">
+  <div class="row clearfix">
+    <div class="col-sm-3 text-center">
+      <label for="image" ng-init="form.image == null">
+        <img ng-if="form.image != null" ng-src="{{'/assets/admin/photos/product-image/'+form.image}}" style="max-width: 100%; height: 208px;"/>
+        <img ng-if="form.image == null" src="/assets/admin/images/cloud-upload.jpg" style="max-width: 100%; height: 208px;"/>
+        <input type="file" class="form-control" id="image"
+               onchange="angular.element(this).scope().imageChanged(this.files)">
+      </label>
+    </div>
+    <div class="col-sm-9">
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <div>*Category</div>
+          <select id="parentCates" ng-change="initCategoriesList()" ng-model="form.category.category.category.id" class="form-control" style="border:solid;">
+            <option ng-repeat="c in cates" ng-value="c.id">{{c.name}}</option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <div>*Sub Category</div>
+          <select ng-change="initProdCategories()" ng-model="form.category.category.id" class="form-control" id="subCates" disabled style="border:solid;">
+            <option ng-repeat="s in subCates" ng-value="s.id">{{s.name}}</option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <div>*Product Category</div>
+          <select ng-model="form.category.id" class="form-control" disabled id="prodCates" style="border:solid;">
+            <option ng-repeat="p in prodCates" ng-value="p.id">{{p.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6 ">
+          <div>*Name</div>
+          <input ng-model="form.name" class="form-control" style="border:solid;">
+        </div>
+        <div class=" col-sm-6">
+          <div>*Price</div>
+          <input ng-model="form.price" type="number" class="form-control" style="border:solid;">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <div>*Create Date</div>
+          <input ng-model="form.createDate" type="date" class="form-control" style="border:solid;">
+        </div>
+        <div class=" col-sm-6">
+          <div>*Origin</div>
+          <input ng-model="form.origin" type="text" class="form-control" style="border:solid;">
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <div class="switch">
+            Description:
+            <input ng-model="form.description" type="text" class="form-control" style="border:solid;">
+          </div>
+        </div>
+        <div class=" col-sm-6">
+          <div>*Quantity</div>
+          <input ng-model="form.quantity" type="number" class="form-control" style="border:solid;">
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <div class="switch">
+            *Available:
+            <label>OFF<input ng-model="form.status" class="form-control" type="checkbox" checked>
+              <span class="lever"></span>ON
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="switch">
+            *Featured:
+            <label>OFF<input ng-model="form.featured" class="form-control" type="checkbox" checked>
+              <span class="lever"></span>ON
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<!--  ng-if="form.category.category.category.id == null"-->
+  <div class="panel-footer text-right ">
+    <button onclick="myFunction()" class="btn btn-primary">
+      Next <b class="fa fa-arrow-circle-right"></b>
+    </button>
+  </div>
+</div>
